@@ -14,6 +14,38 @@ class DBActionModel {
 
     /**
      * This method is responsible for 
+     * connecting to the database
+     * @return PDO|null
+     */
+    public static function connection(): ?PDO
+    {
+        $config = AppConfig::DBConfig();
+        return new PDO("mysql:host=" . $config['host'] . ":" . $config['port'] . ";dbname=" . $config['database'], $config['user'], $config['password']);
+    }
+
+    /**
+     * This method is responsible 
+     * for saving the event
+     *
+     * @param string $user
+     * @param string $event
+     * @return int|null
+     */
+    public static function SendEvent(string $user, string $event): ?int
+    {
+        try {
+            $conn = self::connection();
+            $sql = "INSERT INTO `Events`(`user_id`, `event_types`, `event_date`) VALUES ((SELECT id FROM `Users` WHERE id = '" . $user . "'),'" . $event . "','" . date("Y-m-d H:i:s") . "');";            
+            $result = $conn->exec($sql);
+            return $result;
+        }
+        catch (PDOException $e) {
+            echo "Database error: " . $e->getMessage();
+        }
+    }
+
+    /**
+     * This method is responsible for 
      * checking the database connection, 
      * 
      * returns true if successful 
