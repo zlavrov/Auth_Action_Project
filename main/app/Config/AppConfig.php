@@ -39,6 +39,12 @@ class AppConfig {
     public static function PageList(): array
     {
         return [
+            'login', 
+            'register', 
+            'b', 
+            'a', 
+            'report', 
+            'activity', 
             'home'
         ];
     }
@@ -59,4 +65,18 @@ class AppConfig {
         ];
     }
 
+    /**
+     * This method is responsible 
+     * for auth routes
+     *
+     * @return array
+     */
+    public static function ActionList(): array
+    {
+        return [ 
+            'auth/register', 
+            'auth/login', 
+            'auth/loguot'
+        ];
+    }
 }

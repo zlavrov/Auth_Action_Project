@@ -5,7 +5,7 @@ $( document ).ready(function() {
      */
     $('#buyACow').on('click', function() {
         $('#divBuyACow>#buyACow').replaceWith( "<h1 style='color: green;'>Thank You</h1>" );
-        events('BUY_COW');
+        events(['BUY_COW']);
     });
 
     /**
@@ -19,14 +19,10 @@ $( document ).ready(function() {
         link.setAttribute('href', '/file/document/report.xlsx');
         link.setAttribute('download', `${day.replaceAll('.', '_')}_${time}/report.xlsx`);
         link.click();
-        events('DOWNLOAD_EXE');
+        events(['DOWNLOAD_EXE']);
         return false;
     });
 
-    /**
-     * 
-     * @param {*} triger 
-     */
     function events(triger) {
         $.ajax({
             type: 'POST',

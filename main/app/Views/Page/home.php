@@ -1,4 +1,4 @@
-<?php use App\Service\RouterService; ?>
+<?php use App\Service\RouterService; if (!$_SESSION["user"]) { header("Location: /login"); } ?>
 <!DOCTYPE html>
 <html lang="en">
 <?php RouterService::ShowComponent("head"); ?>

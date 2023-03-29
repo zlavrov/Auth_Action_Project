@@ -4,6 +4,8 @@ namespace App\Service;
 
 use App\Config\AppConfig;
 use App\Model\DBActionModel;
+use App\Controller\AuthController;
+use App\Controller\EventController;
 
 /**
  * This class is responsible for 
@@ -42,16 +44,35 @@ class RouterService {
         $query = $_GET["q"];
         if($_SERVER['REQUEST_METHOD'] === "GET") {
             if(in_array($query, AppConfig::PageList()) && $checkDataBase) {
+                if($_SESSION['user'] && ($query == "a" || $query == "b")) {
+                    EventController::SendView($_SESSION['user'], $query);
+                }
                 require_once "app/Views/Page/" . $query . ".php";
                 die();
             } else if (!$query) {
                 require_once "app/Views/Page/home.php";
                 die();
+            } else if($query === "logout") {
+                unset($_SESSION["user"]);
+                header("Location: /login");
             }
             require_once "app/Views/Error/404.php";
+        } else if($_SERVER['REQUEST_METHOD'] === "POST") {
+            if(isset($_POST["username"]) && isset($_POST["password"])) {
+                if(in_array($query, AppConfig::ActionList()) && $checkDataBase) {
+                    switch($query) {
+                        case "auth/register":
+                            AuthController::register($_POST["username"], password_hash($_POST["password"], PASSWORD_DEFAULT));
+                            break;
+                        case "auth/login":
+                            AuthController::login($_POST["username"], $_POST["password"]);
+                            break;
+                    }
+                }
+            }
         }
     }
-    
+
     /**
      * This startup method polls the method 
      * responsible for connecting to the database 
